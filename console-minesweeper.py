@@ -68,16 +68,25 @@ class MineSweeper(object):
 			return ERROR
 
 		if op == "f" or op == "F":
-			if self.board[y][x].visible:
-				return CONTINUE
+			if self.board[y][x].flug:
+				self.board[y][x].visible = False
+				self.board[y][x].flug = False
+				self.numOfMines += 1
 
-			self.board[y][x].visible = True
-			self.board[y][x].flug = True
-			self.numOfMines -= 1
+			elif self.board[y][x].visible:
+				pass
+
+			else:
+				self.board[y][x].visible = True
+				self.board[y][x].flug = True
+				self.numOfMines -= 1
 
 			return CONTINUE
 
 		elif op == "o" or op == "O":
+			if self.board[y][x].flug:
+				return CONTINUE
+
 			if not self.board[y][x].visible:
 				self.numOfOpen += 1
 			self.board[y][x].visible = True
