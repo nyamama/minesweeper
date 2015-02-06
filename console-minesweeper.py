@@ -84,13 +84,7 @@ class MineSweeper(object):
 			return CONTINUE
 
 		elif op == "o" or op == "O":
-			if self.board[y][x].flug:
-				return CONTINUE
-
-			if not self.board[y][x].visible:
-				self.numOfOpen += 1
-			self.board[y][x].visible = True
-			return GAMEOVER if self.board[y][x].mine else self.clear()
+			return GAMEOVER if not self.recursiveOpen(x, y) else self.clear()
 
 		return ERROR
 
@@ -120,6 +114,29 @@ class MineSweeper(object):
 	def innerPoint(self, x, y):
 		return 0 <= x < self.W and 0 <= y < self.H
 
+	def recursiveOpen(self, x, y):
+		if self.board[y][x].flug and self.board[y][x].mine:
+			return False
+
+		if self.board[y][x].visible:
+			return True
+
+		self.board[y][x].visible = True
+		if self.board[y][x].mine:
+			return False
+
+		self.numOfOpen += 1
+
+		if self.countNumOfMines(x, y) == 0:
+			for p in dps:
+				(nx, ny) = (x + p[0], y + p[1])
+				if not self.innerPoint(nx, ny):
+					continue
+
+				if not self.recursiveOpen(nx, ny):
+					return False
+
+		return True
 
 	def printBoard(self, ignore = False):
 		print 
