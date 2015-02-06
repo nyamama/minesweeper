@@ -115,7 +115,7 @@ class MineSweeper(object):
 		return 0 <= x < self.W and 0 <= y < self.H
 
 	def recursiveOpen(self, x, y):
-		if self.board[y][x].flug and self.board[y][x].mines:
+		if self.board[y][x].flug and self.board[y][x].mine:
 			return False
 
 		if self.board[y][x].visible:
