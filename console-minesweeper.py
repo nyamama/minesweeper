@@ -42,11 +42,11 @@ class Cell(object):
 			return str(self.number)
 
 class MineSweeper(object):
-	def __init__(self):
-		self.H = 5
-		self.W = 5
-		self.numOfMines = 5
-		self.maxMines   = 5
+	def __init__(self, H = 5, W = 5, maxOfMine = 5):
+		self.H = H
+		self.W = W
+		self.numOfMines = maxOfMine
+		self.maxMines   = maxOfMine
 		self.numOfOpen  = 0
 		cells = []
 		for i in range(self.numOfMines):
@@ -134,6 +134,28 @@ class Game(object):
 	def __init__(self):
 		self.minesweeper = MineSweeper()
 
+	def menu(self):
+		print u"サイズを入力してください(26×26まで)"
+		print u"例）5×5のフィールドに５個の地雷を埋める： 5 5 5"
+		(H, W, mines) =  raw_input().strip().split(" ")[:3]
+
+		while not self.checkSize(H, W, mines):
+			print u"正しいサイズを入力してください"
+			(H, W, mines) =  raw_input().strip().split(" ")[:3]
+
+		self.minesweeper = MineSweeper(int(H), int(W), int(mines))
+		self.play()
+
+	def checkSize(self, H, W, mines):
+		if not H.isdigit() or not W.isdigit() or not mines.isdigit():
+			return False
+
+		if 1 <= int(H) <= 26 and 1 <= int(W) <= 26:
+			if not (1 <= int(mines) <= int(H) * int(W)):
+				return False
+
+		return True
+
 	def play(self):
 		state = CONTINUE
 		print u"ゲーム開始！！"
@@ -173,4 +195,4 @@ class Game(object):
 
 
 if __name__ == '__main__':
-	Game().play()
+	Game().menu()
